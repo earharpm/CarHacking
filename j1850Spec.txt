@@ -1,0 +1,87 @@
+#SAE PWM J1850 Specification
+
+       _________________________________________                       ________ 
+      |         |      |                  |     |           |         |         ...
+ IFS  |   SOF   | BRK? |    Data Field    | CRC | EOD / EOF |   IFS   |    SOF  ...
+      |_________|______|__________________|_____|           |         |________ ...
+      |<---------------- Full Message --------------------->|         |<- Next Message
+
+
+       _________________________________________       ___________________                 ________ 
+      |         |      |                  |     |     |    |        |     |     |         |         ...
+ IFS  |   SOF   | BRK? |    Data Field    | CRC | EOD | NA | IFR(S) | CRC | EOF |   IFS   |    SOF  ...
+      |_________|______|__________________|_____|     |____|________|_____|     |         |________ ...
+      |<---------------------------- Full Message ----------------------------->|         |<- Next Message
+
+
+
+Data Field Description
+	 _________________________
+	|        |                 ...
+	| Header |    Data         ...
+	|________|________________ ...
+
+	    Max 11 bytes including header
+	      11 * 8 b/B * 24uS/b = 2112uS
+
+
+		  Header
+		 __7____6____5____4____3____2____1____0_
+		|                                       |
+		| P2 | P1 | P0 | H  | K  | Y  | Z1 | Z0 |
+		|_______________________________________|
+
+		P2  Priority bits:   000 - highest
+		P1				     111 - lowest
+		P0
+
+		H   Header Type:       0 - Three Byte Header
+						       1 - One Byte Header
+
+		K   In-Frame Response: 0 - IFR Required
+		      (IFR)            1 - IFR Not Allowed
+
+		Y   Addressing Mode:   0 - Functional 
+		                       1 - Physical
+
+		Z1  Specific Message Type
+		Z0    Unknown
+
+		Header Byte 2 - Target Address
+		Header Byte 3 - Source Address
+
+
+Timing Table
+ ____________ _____________________
+|            |                     |
+|   Field    | Total | HIGH | Low  |
+|==================================|
+| 0 Bit      |  24uS | 15uS |  9uS |
+|----------------------------------|
+| 1 Bit      |  24uS |  7uS | 17uS |
+|==================================|
+| SOF        |  48uS | 31uS | 17uS |
+|----------------------------------|
+| EOD        |  24uS | ---- | 24uS |
+|----------------------------------|
+| EOF        |  48uS | ---- | 48uS |
+*----------------------------------*
+
+
+Notes:
+
+	Data Field
+	  * 11 Bytes
+			1st byte is header
+			2nd and 3rd can also be secondary header
+
+	Cyclical Redundancy Check (CRC)
+	  * Some polynomial division magic
+			Should equate to 0xC4 somehow
+
+	End of Data (EOD)
+	  * Bus is held low
+	  * Transitions directly into EOF if no IFR
+
+	End of Frame (EOF)
+	  * Buss is held low
