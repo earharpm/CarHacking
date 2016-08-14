@@ -16,39 +16,39 @@
 
 
 Data Field Description
-	 _________________________
-	|        |                 ...
-	| Header |    Data         ...
-	|________|________________ ...
+ _________________________
+|        |                 ...
+| Header |    Data         ...
+|________|________________ ...
 
-	    Max 11 bytes including header
-	      11 * 8 b/B * 24uS/b = 2112uS
+    Max 11 bytes including header
+      11 * 8 b/B * 24uS/b = 2112uS
 
 
-		  Header
-		 __7____6____5____4____3____2____1____0_
-		|                                       |
-		| P2 | P1 | P0 | H  | K  | Y  | Z1 | Z0 |
-		|_______________________________________|
+	  Header
+	 __7____6____5____4____3____2____1____0_
+	|                                       |
+	| P2 | P1 | P0 | H  | K  | Y  | Z1 | Z0 |
+	|_______________________________________|
 
-		P2  Priority bits:   000 - highest
-		P1				     111 - lowest
-		P0
+	P2  Priority bits:   000 - highest
+	P1				     111 - lowest
+	P0
 
-		H   Header Type:       0 - Three Byte Header
-						       1 - One Byte Header
+	H   Header Type:       0 - Three Byte Header
+					       1 - One Byte Header
 
-		K   In-Frame Response: 0 - IFR Required
-		      (IFR)            1 - IFR Not Allowed
+	K   In-Frame Response: 0 - IFR Required
+	      (IFR)            1 - IFR Not Allowed
 
-		Y   Addressing Mode:   0 - Functional 
-		                       1 - Physical
+	Y   Addressing Mode:   0 - Functional 
+	                       1 - Physical
 
-		Z1  Specific Message Type
-		Z0    Unknown
+	Z1  Specific Message Type
+	Z0    Unknown
 
-		Header Byte 2 - Target Address
-		Header Byte 3 - Source Address
+	Header Byte 2 - Target Address
+	Header Byte 3 - Source Address
 
 
 Timing Table
